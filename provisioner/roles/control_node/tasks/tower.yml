@@ -18,6 +18,16 @@
     src: tower_install.j2
     dest: /tmp/tower_install/inventory
 
+## TO REMOVE
+- name: Register /tmp/tower_install/inventory
+  command: cat /tmp/tower_install/inventory
+  register: inventory_content
+
+- name: Show inventory content
+  debug:
+    msg: '{{ inventory_content.stdout }}'
+##
+
 - name: run the Ansible Tower installer
   shell: ./setup.sh chdir=/tmp/tower_install
   async: 900
@@ -42,3 +52,7 @@
   until: check2.json is defined
   retries: 10
   delay: 30
+
+- name: Display /api/v2/ping results
+  debug:
+    msg: '{{ check2.json }}'
